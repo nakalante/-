@@ -1,0 +1,873 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "mount_file_id": "1Mn38CywNHJdQJFf88fe9uIHexMJ0x81q",
+      "authorship_tag": "ABX9TyOpXVbW8ONh9IFotXO1JPkF"
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "# Загрузим все необходимые библиотеки\n",
+        "import os\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "\n",
+        "import matplotlib.pyplot as plt\n",
+        "import plotly as py\n",
+        "import plotly.io as pio\n",
+        "import plotly.graph_objects as go\n",
+        "import plotly.express as px\n",
+        "from plotly.subplots import make_subplots\n",
+        "from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot"
+      ],
+      "metadata": {
+        "id": "Ag_IaeGTm7G3"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "1E8n0uJ85vRl",
+        "outputId": "984aa7e3-1dba-4bfa-b502-10d83a24016c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount(\"/content/drive\", force_remount=True).\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "coff = '/content/drive/My Drive/Colab Notebooks/BHR Coffee.csv'\n",
+        "df = pd.read_csv(coff)\n",
+        "print(df)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "X3vM27sC57sZ",
+        "outputId": "d3be895e-165e-428f-afac-e1877cc05a11"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "          Date     1   0,5  0,2  All coffee\n",
+            "0   08.01.2024  4764   964  665        5379\n",
+            "1   15.01.2024  3803  1026  622        4440\n",
+            "2   22.01.2024  3233   879  631        3799\n",
+            "3   29.01.2024  4309  1298  750        5108\n",
+            "4   05.02.2024  4179   881  577        4735\n",
+            "..         ...   ...   ...  ...         ...\n",
+            "69  19.05.2025  7953  1727  678        8952\n",
+            "70  26.05.2025  7438  1779  769        8481\n",
+            "71  02.06.2025  8560  1613  586        9484\n",
+            "72  09.06.2025  7182  1514  640        8067\n",
+            "73  16.06.2025  7709  1525  613        8594\n",
+            "\n",
+            "[74 rows x 5 columns]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.head()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 206
+        },
+        "id": "-a1IgS6rp73h",
+        "outputId": "8594c9fc-4510-41a3-b465-debcc2648209"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "         Date     1   0,5  0,2  All coffee\n",
+              "0  08.01.2024  4764   964  665        5379\n",
+              "1  15.01.2024  3803  1026  622        4440\n",
+              "2  22.01.2024  3233   879  631        3799\n",
+              "3  29.01.2024  4309  1298  750        5108\n",
+              "4  05.02.2024  4179   881  577        4735"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-1ab753c8-11c4-4006-992b-db6fb598a524\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Date</th>\n",
+              "      <th>1</th>\n",
+              "      <th>0,5</th>\n",
+              "      <th>0,2</th>\n",
+              "      <th>All coffee</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>08.01.2024</td>\n",
+              "      <td>4764</td>\n",
+              "      <td>964</td>\n",
+              "      <td>665</td>\n",
+              "      <td>5379</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>15.01.2024</td>\n",
+              "      <td>3803</td>\n",
+              "      <td>1026</td>\n",
+              "      <td>622</td>\n",
+              "      <td>4440</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>22.01.2024</td>\n",
+              "      <td>3233</td>\n",
+              "      <td>879</td>\n",
+              "      <td>631</td>\n",
+              "      <td>3799</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>29.01.2024</td>\n",
+              "      <td>4309</td>\n",
+              "      <td>1298</td>\n",
+              "      <td>750</td>\n",
+              "      <td>5108</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>05.02.2024</td>\n",
+              "      <td>4179</td>\n",
+              "      <td>881</td>\n",
+              "      <td>577</td>\n",
+              "      <td>4735</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-1ab753c8-11c4-4006-992b-db6fb598a524')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-1ab753c8-11c4-4006-992b-db6fb598a524 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-1ab753c8-11c4-4006-992b-db6fb598a524');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "    <div id=\"df-c81c05a0-de0c-4a9f-af89-35ae01af68e6\">\n",
+              "      <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-c81c05a0-de0c-4a9f-af89-35ae01af68e6')\"\n",
+              "                title=\"Suggest charts\"\n",
+              "                style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "      </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "      <script>\n",
+              "        async function quickchart(key) {\n",
+              "          const quickchartButtonEl =\n",
+              "            document.querySelector('#' + key + ' button');\n",
+              "          quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "          quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "          try {\n",
+              "            const charts = await google.colab.kernel.invokeFunction(\n",
+              "                'suggestCharts', [key], {});\n",
+              "          } catch (error) {\n",
+              "            console.error('Error during call to suggestCharts:', error);\n",
+              "          }\n",
+              "          quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "          quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "        }\n",
+              "        (() => {\n",
+              "          let quickchartButtonEl =\n",
+              "            document.querySelector('#df-c81c05a0-de0c-4a9f-af89-35ae01af68e6 button');\n",
+              "          quickchartButtonEl.style.display =\n",
+              "            google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "        })();\n",
+              "      </script>\n",
+              "    </div>\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe",
+              "variable_name": "df",
+              "summary": "{\n  \"name\": \"df\",\n  \"rows\": 74,\n  \"fields\": [\n    {\n      \"column\": \"Date\",\n      \"properties\": {\n        \"dtype\": \"string\",\n        \"num_unique_values\": 74,\n        \"samples\": [\n          \"05.02.2024\",\n          \"07.04.2025\",\n          \"20.05.2024\"\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"1\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 1156,\n        \"min\": 3233,\n        \"max\": 8787,\n        \"num_unique_values\": 73,\n        \"samples\": [\n          4179,\n          7171,\n          5499\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"0,5\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 280,\n        \"min\": 606,\n        \"max\": 1976,\n        \"num_unique_values\": 70,\n        \"samples\": [\n          1081,\n          964,\n          1089\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"0,2\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 178,\n        \"min\": 322,\n        \"max\": 1351,\n        \"num_unique_values\": 70,\n        \"samples\": [\n          566,\n          665,\n          444\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    },\n    {\n      \"column\": \"All coffee\",\n      \"properties\": {\n        \"dtype\": \"number\",\n        \"std\": 1280,\n        \"min\": 3799,\n        \"max\": 9812,\n        \"num_unique_values\": 72,\n        \"samples\": [\n          4735,\n          8132,\n          6307\n        ],\n        \"semantic_type\": \"\",\n        \"description\": \"\"\n      }\n    }\n  ]\n}"
+            }
+          },
+          "metadata": {},
+          "execution_count": 53
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df['Date'] = pd.to_datetime(df['Date'], format='%d.%m.%Y')"
+      ],
+      "metadata": {
+        "id": "j5nH7e8JrjSJ"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "fig = go.Figure()\n",
+        "fig.add_scatter(x=df.Date, y=df['1'], line=dict(color='green'))\n",
+        "fig.update_xaxes(rangeslider_visible=True) # Обновляем ось Х, добавляя в нее ползунок диапазона\n",
+        "fig.update_layout(\n",
+        "  title='Продажи 500г пачек кофе поштучно',\n",
+        "  xaxis_title='Дата',\n",
+        "  yaxis_title='Количество пачек кофе в шт'\n",
+        "                  )\n",
+        "fig.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 542
+        },
+        "id": "sg5z08j8sS4M",
+        "outputId": "6d27b8dd-fae8-4b46-acc4-b29518a45e8d"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<html>\n",
+              "<head><meta charset=\"utf-8\" /></head>\n",
+              "<body>\n",
+              "    <div>            <script src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG\"></script><script type=\"text/javascript\">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: \"STIX-Web\"}});}</script>                <script type=\"text/javascript\">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>\n",
+              "        <script charset=\"utf-8\" src=\"https://cdn.plot.ly/plotly-2.35.2.min.js\"></script>                <div id=\"146cac66-1123-4b96-aad4-08c68713efb8\" class=\"plotly-graph-div\" style=\"height:525px; width:100%;\"></div>            <script type=\"text/javascript\">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById(\"146cac66-1123-4b96-aad4-08c68713efb8\")) {                    Plotly.newPlot(                        \"146cac66-1123-4b96-aad4-08c68713efb8\",                        [{\"line\":{\"color\":\"green\"},\"x\":[\"2024-01-08T00:00:00\",\"2024-01-15T00:00:00\",\"2024-01-22T00:00:00\",\"2024-01-29T00:00:00\",\"2024-02-05T00:00:00\",\"2024-02-12T00:00:00\",\"2024-02-19T00:00:00\",\"2024-02-26T00:00:00\",\"2024-03-04T00:00:00\",\"2024-03-11T00:00:00\",\"2024-03-18T00:00:00\",\"2024-04-01T00:00:00\",\"2024-04-08T00:00:00\",\"2024-04-15T00:00:00\",\"2024-04-22T00:00:00\",\"2024-04-27T00:00:00\",\"2024-05-06T00:00:00\",\"2024-05-13T00:00:00\",\"2024-05-20T00:00:00\",\"2024-05-27T00:00:00\",\"2024-06-03T00:00:00\",\"2024-06-10T00:00:00\",\"2024-06-17T00:00:00\",\"2024-06-24T00:00:00\",\"2024-07-01T00:00:00\",\"2024-07-08T00:00:00\",\"2024-07-15T00:00:00\",\"2024-07-22T00:00:00\",\"2024-07-29T00:00:00\",\"2024-08-05T00:00:00\",\"2024-08-12T00:00:00\",\"2024-08-19T00:00:00\",\"2024-08-26T00:00:00\",\"2024-09-02T00:00:00\",\"2024-09-09T00:00:00\",\"2024-09-16T00:00:00\",\"2024-09-23T00:00:00\",\"2024-09-30T00:00:00\",\"2024-10-07T00:00:00\",\"2024-10-14T00:00:00\",\"2024-10-21T00:00:00\",\"2024-10-28T00:00:00\",\"2024-11-04T00:00:00\",\"2024-11-11T00:00:00\",\"2024-11-18T00:00:00\",\"2024-11-25T00:00:00\",\"2024-12-02T00:00:00\",\"2024-12-09T00:00:00\",\"2024-12-16T00:00:00\",\"2024-12-23T00:00:00\",\"2025-01-06T00:00:00\",\"2025-01-13T00:00:00\",\"2025-01-20T00:00:00\",\"2025-01-27T00:00:00\",\"2025-02-03T00:00:00\",\"2025-02-10T00:00:00\",\"2025-02-17T00:00:00\",\"2025-02-24T00:00:00\",\"2025-03-03T00:00:00\",\"2025-03-10T00:00:00\",\"2025-03-17T00:00:00\",\"2025-03-24T00:00:00\",\"2025-03-31T00:00:00\",\"2025-04-07T00:00:00\",\"2025-04-14T00:00:00\",\"2025-04-21T00:00:00\",\"2025-04-28T00:00:00\",\"2025-05-05T00:00:00\",\"2025-05-12T00:00:00\",\"2025-05-19T00:00:00\",\"2025-05-26T00:00:00\",\"2025-06-02T00:00:00\",\"2025-06-09T00:00:00\",\"2025-06-16T00:00:00\"],\"y\":[4764,3803,3233,4309,4179,5175,4629,5603,5352,6624,5422,5698,7563,7901,7948,5223,5897,4838,5499,5523,7135,5311,6026,5580,6679,5289,5462,5383,6071,5221,7271,5902,6876,5895,7287,6527,6977,6268,7022,6289,5899,6046,6702,5474,6050,5825,7383,5578,8039,8787,5787,6985,4578,6213,5779,6774,5450,6143,6343,6268,6751,7425,7254,7728,7171,8360,7742,7859,6656,7953,7438,8560,7182,7709],\"type\":\"scatter\"}],                        {\"template\":{\"data\":{\"histogram2dcontour\":[{\"type\":\"histogram2dcontour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"choropleth\":[{\"type\":\"choropleth\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"histogram2d\":[{\"type\":\"histogram2d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmap\":[{\"type\":\"heatmap\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmapgl\":[{\"type\":\"heatmapgl\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"contourcarpet\":[{\"type\":\"contourcarpet\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"contour\":[{\"type\":\"contour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"surface\":[{\"type\":\"surface\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"mesh3d\":[{\"type\":\"mesh3d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"scatter\":[{\"fillpattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2},\"type\":\"scatter\"}],\"parcoords\":[{\"type\":\"parcoords\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolargl\":[{\"type\":\"scatterpolargl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"bar\":[{\"error_x\":{\"color\":\"#2a3f5f\"},\"error_y\":{\"color\":\"#2a3f5f\"},\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"bar\"}],\"scattergeo\":[{\"type\":\"scattergeo\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolar\":[{\"type\":\"scatterpolar\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"histogram\":[{\"marker\":{\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"histogram\"}],\"scattergl\":[{\"type\":\"scattergl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatter3d\":[{\"type\":\"scatter3d\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattermapbox\":[{\"type\":\"scattermapbox\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterternary\":[{\"type\":\"scatterternary\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattercarpet\":[{\"type\":\"scattercarpet\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"carpet\":[{\"aaxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"baxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"type\":\"carpet\"}],\"table\":[{\"cells\":{\"fill\":{\"color\":\"#EBF0F8\"},\"line\":{\"color\":\"white\"}},\"header\":{\"fill\":{\"color\":\"#C8D4E3\"},\"line\":{\"color\":\"white\"}},\"type\":\"table\"}],\"barpolar\":[{\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"barpolar\"}],\"pie\":[{\"automargin\":true,\"type\":\"pie\"}]},\"layout\":{\"autotypenumbers\":\"strict\",\"colorway\":[\"#636efa\",\"#EF553B\",\"#00cc96\",\"#ab63fa\",\"#FFA15A\",\"#19d3f3\",\"#FF6692\",\"#B6E880\",\"#FF97FF\",\"#FECB52\"],\"font\":{\"color\":\"#2a3f5f\"},\"hovermode\":\"closest\",\"hoverlabel\":{\"align\":\"left\"},\"paper_bgcolor\":\"white\",\"plot_bgcolor\":\"#E5ECF6\",\"polar\":{\"bgcolor\":\"#E5ECF6\",\"angularaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"radialaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"ternary\":{\"bgcolor\":\"#E5ECF6\",\"aaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"baxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"caxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"coloraxis\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"colorscale\":{\"sequential\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"sequentialminus\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"diverging\":[[0,\"#8e0152\"],[0.1,\"#c51b7d\"],[0.2,\"#de77ae\"],[0.3,\"#f1b6da\"],[0.4,\"#fde0ef\"],[0.5,\"#f7f7f7\"],[0.6,\"#e6f5d0\"],[0.7,\"#b8e186\"],[0.8,\"#7fbc41\"],[0.9,\"#4d9221\"],[1,\"#276419\"]]},\"xaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"yaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"scene\":{\"xaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"yaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"zaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2}},\"shapedefaults\":{\"line\":{\"color\":\"#2a3f5f\"}},\"annotationdefaults\":{\"arrowcolor\":\"#2a3f5f\",\"arrowhead\":0,\"arrowwidth\":1},\"geo\":{\"bgcolor\":\"white\",\"landcolor\":\"#E5ECF6\",\"subunitcolor\":\"white\",\"showland\":true,\"showlakes\":true,\"lakecolor\":\"white\"},\"title\":{\"x\":0.05},\"mapbox\":{\"style\":\"light\"}}},\"xaxis\":{\"rangeslider\":{\"visible\":true},\"title\":{\"text\":\"Дата\"}},\"title\":{\"text\":\"Продажи 500г пачек кофе поштучно\"},\"yaxis\":{\"title\":{\"text\":\"Количество пачек кофе в шт\"}}},                        {\"responsive\": true}                    ).then(function(){\n",
+              "                            \n",
+              "var gd = document.getElementById('146cac66-1123-4b96-aad4-08c68713efb8');\n",
+              "var x = new MutationObserver(function (mutations, observer) {{\n",
+              "        var display = window.getComputedStyle(gd).display;\n",
+              "        if (!display || display === 'none') {{\n",
+              "            console.log([gd, 'removed!']);\n",
+              "            Plotly.purge(gd);\n",
+              "            observer.disconnect();\n",
+              "        }}\n",
+              "}});\n",
+              "\n",
+              "// Listen for the removal of the full notebook cells\n",
+              "var notebookContainer = gd.closest('#notebook-container');\n",
+              "if (notebookContainer) {{\n",
+              "    x.observe(notebookContainer, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "// Listen for the clearing of the current output cell\n",
+              "var outputEl = gd.closest('.output');\n",
+              "if (outputEl) {{\n",
+              "    x.observe(outputEl, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "                        })                };                            </script>        </div>\n",
+              "</body>\n",
+              "</html>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "fig = go.Figure()\n",
+        "fig.add_scatter(x=df.Date, y=df['0,5'], line=dict(color='blue'))\n",
+        "fig.update_xaxes(rangeslider_visible=True) # Обновляем ось Х, добавляя в нее ползунок диапазона\n",
+        "fig.update_layout(\n",
+        "  title='Продажи 500г пачек кофе поштучно',\n",
+        "  xaxis_title='Дата',\n",
+        "  yaxis_title='Количество пачек кофе в шт'\n",
+        "                  )\n",
+        "fig.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 542
+        },
+        "id": "V07jw2TEvx4A",
+        "outputId": "6688f015-ba92-48a2-bd8e-e8a8eadcebc3"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<html>\n",
+              "<head><meta charset=\"utf-8\" /></head>\n",
+              "<body>\n",
+              "    <div>            <script src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG\"></script><script type=\"text/javascript\">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: \"STIX-Web\"}});}</script>                <script type=\"text/javascript\">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>\n",
+              "        <script charset=\"utf-8\" src=\"https://cdn.plot.ly/plotly-2.35.2.min.js\"></script>                <div id=\"cc19c4c4-d898-4d72-922a-9940e44e90bb\" class=\"plotly-graph-div\" style=\"height:525px; width:100%;\"></div>            <script type=\"text/javascript\">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById(\"cc19c4c4-d898-4d72-922a-9940e44e90bb\")) {                    Plotly.newPlot(                        \"cc19c4c4-d898-4d72-922a-9940e44e90bb\",                        [{\"line\":{\"color\":\"blue\"},\"x\":[\"2024-01-08T00:00:00\",\"2024-01-15T00:00:00\",\"2024-01-22T00:00:00\",\"2024-01-29T00:00:00\",\"2024-02-05T00:00:00\",\"2024-02-12T00:00:00\",\"2024-02-19T00:00:00\",\"2024-02-26T00:00:00\",\"2024-03-04T00:00:00\",\"2024-03-11T00:00:00\",\"2024-03-18T00:00:00\",\"2024-04-01T00:00:00\",\"2024-04-08T00:00:00\",\"2024-04-15T00:00:00\",\"2024-04-22T00:00:00\",\"2024-04-27T00:00:00\",\"2024-05-06T00:00:00\",\"2024-05-13T00:00:00\",\"2024-05-20T00:00:00\",\"2024-05-27T00:00:00\",\"2024-06-03T00:00:00\",\"2024-06-10T00:00:00\",\"2024-06-17T00:00:00\",\"2024-06-24T00:00:00\",\"2024-07-01T00:00:00\",\"2024-07-08T00:00:00\",\"2024-07-15T00:00:00\",\"2024-07-22T00:00:00\",\"2024-07-29T00:00:00\",\"2024-08-05T00:00:00\",\"2024-08-12T00:00:00\",\"2024-08-19T00:00:00\",\"2024-08-26T00:00:00\",\"2024-09-02T00:00:00\",\"2024-09-09T00:00:00\",\"2024-09-16T00:00:00\",\"2024-09-23T00:00:00\",\"2024-09-30T00:00:00\",\"2024-10-07T00:00:00\",\"2024-10-14T00:00:00\",\"2024-10-21T00:00:00\",\"2024-10-28T00:00:00\",\"2024-11-04T00:00:00\",\"2024-11-11T00:00:00\",\"2024-11-18T00:00:00\",\"2024-11-25T00:00:00\",\"2024-12-02T00:00:00\",\"2024-12-09T00:00:00\",\"2024-12-16T00:00:00\",\"2024-12-23T00:00:00\",\"2025-01-06T00:00:00\",\"2025-01-13T00:00:00\",\"2025-01-20T00:00:00\",\"2025-01-27T00:00:00\",\"2025-02-03T00:00:00\",\"2025-02-10T00:00:00\",\"2025-02-17T00:00:00\",\"2025-02-24T00:00:00\",\"2025-03-03T00:00:00\",\"2025-03-10T00:00:00\",\"2025-03-17T00:00:00\",\"2025-03-24T00:00:00\",\"2025-03-31T00:00:00\",\"2025-04-07T00:00:00\",\"2025-04-14T00:00:00\",\"2025-04-21T00:00:00\",\"2025-04-28T00:00:00\",\"2025-05-05T00:00:00\",\"2025-05-12T00:00:00\",\"2025-05-19T00:00:00\",\"2025-05-26T00:00:00\",\"2025-06-02T00:00:00\",\"2025-06-09T00:00:00\",\"2025-06-16T00:00:00\"],\"y\":[964,1026,879,1298,881,1072,989,1258,1181,1483,1292,1122,1657,1717,1654,989,987,606,1319,1163,1435,1042,1082,1081,990,933,911,1024,933,870,1169,1246,1313,1173,1154,1139,1123,1436,1337,1183,1598,1461,1529,1360,1346,1660,1682,1435,1634,1509,1306,1261,1089,1148,1269,1241,1365,1442,1537,1552,1580,1509,1571,1898,1586,1976,1665,1610,1439,1727,1779,1613,1514,1525],\"type\":\"scatter\"}],                        {\"template\":{\"data\":{\"histogram2dcontour\":[{\"type\":\"histogram2dcontour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"choropleth\":[{\"type\":\"choropleth\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"histogram2d\":[{\"type\":\"histogram2d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmap\":[{\"type\":\"heatmap\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmapgl\":[{\"type\":\"heatmapgl\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"contourcarpet\":[{\"type\":\"contourcarpet\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"contour\":[{\"type\":\"contour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"surface\":[{\"type\":\"surface\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"mesh3d\":[{\"type\":\"mesh3d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"scatter\":[{\"fillpattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2},\"type\":\"scatter\"}],\"parcoords\":[{\"type\":\"parcoords\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolargl\":[{\"type\":\"scatterpolargl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"bar\":[{\"error_x\":{\"color\":\"#2a3f5f\"},\"error_y\":{\"color\":\"#2a3f5f\"},\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"bar\"}],\"scattergeo\":[{\"type\":\"scattergeo\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolar\":[{\"type\":\"scatterpolar\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"histogram\":[{\"marker\":{\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"histogram\"}],\"scattergl\":[{\"type\":\"scattergl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatter3d\":[{\"type\":\"scatter3d\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattermapbox\":[{\"type\":\"scattermapbox\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterternary\":[{\"type\":\"scatterternary\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattercarpet\":[{\"type\":\"scattercarpet\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"carpet\":[{\"aaxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"baxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"type\":\"carpet\"}],\"table\":[{\"cells\":{\"fill\":{\"color\":\"#EBF0F8\"},\"line\":{\"color\":\"white\"}},\"header\":{\"fill\":{\"color\":\"#C8D4E3\"},\"line\":{\"color\":\"white\"}},\"type\":\"table\"}],\"barpolar\":[{\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"barpolar\"}],\"pie\":[{\"automargin\":true,\"type\":\"pie\"}]},\"layout\":{\"autotypenumbers\":\"strict\",\"colorway\":[\"#636efa\",\"#EF553B\",\"#00cc96\",\"#ab63fa\",\"#FFA15A\",\"#19d3f3\",\"#FF6692\",\"#B6E880\",\"#FF97FF\",\"#FECB52\"],\"font\":{\"color\":\"#2a3f5f\"},\"hovermode\":\"closest\",\"hoverlabel\":{\"align\":\"left\"},\"paper_bgcolor\":\"white\",\"plot_bgcolor\":\"#E5ECF6\",\"polar\":{\"bgcolor\":\"#E5ECF6\",\"angularaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"radialaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"ternary\":{\"bgcolor\":\"#E5ECF6\",\"aaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"baxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"caxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"coloraxis\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"colorscale\":{\"sequential\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"sequentialminus\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"diverging\":[[0,\"#8e0152\"],[0.1,\"#c51b7d\"],[0.2,\"#de77ae\"],[0.3,\"#f1b6da\"],[0.4,\"#fde0ef\"],[0.5,\"#f7f7f7\"],[0.6,\"#e6f5d0\"],[0.7,\"#b8e186\"],[0.8,\"#7fbc41\"],[0.9,\"#4d9221\"],[1,\"#276419\"]]},\"xaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"yaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"scene\":{\"xaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"yaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"zaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2}},\"shapedefaults\":{\"line\":{\"color\":\"#2a3f5f\"}},\"annotationdefaults\":{\"arrowcolor\":\"#2a3f5f\",\"arrowhead\":0,\"arrowwidth\":1},\"geo\":{\"bgcolor\":\"white\",\"landcolor\":\"#E5ECF6\",\"subunitcolor\":\"white\",\"showland\":true,\"showlakes\":true,\"lakecolor\":\"white\"},\"title\":{\"x\":0.05},\"mapbox\":{\"style\":\"light\"}}},\"xaxis\":{\"rangeslider\":{\"visible\":true},\"title\":{\"text\":\"Дата\"}},\"title\":{\"text\":\"Продажи 500г пачек кофе поштучно\"},\"yaxis\":{\"title\":{\"text\":\"Количество пачек кофе в шт\"}}},                        {\"responsive\": true}                    ).then(function(){\n",
+              "                            \n",
+              "var gd = document.getElementById('cc19c4c4-d898-4d72-922a-9940e44e90bb');\n",
+              "var x = new MutationObserver(function (mutations, observer) {{\n",
+              "        var display = window.getComputedStyle(gd).display;\n",
+              "        if (!display || display === 'none') {{\n",
+              "            console.log([gd, 'removed!']);\n",
+              "            Plotly.purge(gd);\n",
+              "            observer.disconnect();\n",
+              "        }}\n",
+              "}});\n",
+              "\n",
+              "// Listen for the removal of the full notebook cells\n",
+              "var notebookContainer = gd.closest('#notebook-container');\n",
+              "if (notebookContainer) {{\n",
+              "    x.observe(notebookContainer, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "// Listen for the clearing of the current output cell\n",
+              "var outputEl = gd.closest('.output');\n",
+              "if (outputEl) {{\n",
+              "    x.observe(outputEl, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "                        })                };                            </script>        </div>\n",
+              "</body>\n",
+              "</html>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "fig = go.Figure()\n",
+        "fig.add_scatter(x=df.Date, y=df['0,2'], line=dict(color='red'))\n",
+        "fig.update_xaxes(rangeslider_visible=True) # Обновляем ось Х, добавляя в нее ползунок диапазона\n",
+        "fig.update_layout(\n",
+        "  title='Продажи 200г пачек кофе поштучно',\n",
+        "  xaxis_title='Дата',\n",
+        "  yaxis_title='Количество пачек кофе в шт'\n",
+        "                  )\n",
+        "fig.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 542
+        },
+        "id": "z33rU-dRtj7w",
+        "outputId": "b8c96c67-49f8-4a5e-c82e-6a1b57d453b5"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<html>\n",
+              "<head><meta charset=\"utf-8\" /></head>\n",
+              "<body>\n",
+              "    <div>            <script src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG\"></script><script type=\"text/javascript\">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: \"STIX-Web\"}});}</script>                <script type=\"text/javascript\">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>\n",
+              "        <script charset=\"utf-8\" src=\"https://cdn.plot.ly/plotly-2.35.2.min.js\"></script>                <div id=\"ef1ff27d-b45f-4eca-a562-1e0191f39cf4\" class=\"plotly-graph-div\" style=\"height:525px; width:100%;\"></div>            <script type=\"text/javascript\">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById(\"ef1ff27d-b45f-4eca-a562-1e0191f39cf4\")) {                    Plotly.newPlot(                        \"ef1ff27d-b45f-4eca-a562-1e0191f39cf4\",                        [{\"line\":{\"color\":\"red\"},\"x\":[\"2024-01-08T00:00:00\",\"2024-01-15T00:00:00\",\"2024-01-22T00:00:00\",\"2024-01-29T00:00:00\",\"2024-02-05T00:00:00\",\"2024-02-12T00:00:00\",\"2024-02-19T00:00:00\",\"2024-02-26T00:00:00\",\"2024-03-04T00:00:00\",\"2024-03-11T00:00:00\",\"2024-03-18T00:00:00\",\"2024-04-01T00:00:00\",\"2024-04-08T00:00:00\",\"2024-04-15T00:00:00\",\"2024-04-22T00:00:00\",\"2024-04-27T00:00:00\",\"2024-05-06T00:00:00\",\"2024-05-13T00:00:00\",\"2024-05-20T00:00:00\",\"2024-05-27T00:00:00\",\"2024-06-03T00:00:00\",\"2024-06-10T00:00:00\",\"2024-06-17T00:00:00\",\"2024-06-24T00:00:00\",\"2024-07-01T00:00:00\",\"2024-07-08T00:00:00\",\"2024-07-15T00:00:00\",\"2024-07-22T00:00:00\",\"2024-07-29T00:00:00\",\"2024-08-05T00:00:00\",\"2024-08-12T00:00:00\",\"2024-08-19T00:00:00\",\"2024-08-26T00:00:00\",\"2024-09-02T00:00:00\",\"2024-09-09T00:00:00\",\"2024-09-16T00:00:00\",\"2024-09-23T00:00:00\",\"2024-09-30T00:00:00\",\"2024-10-07T00:00:00\",\"2024-10-14T00:00:00\",\"2024-10-21T00:00:00\",\"2024-10-28T00:00:00\",\"2024-11-04T00:00:00\",\"2024-11-11T00:00:00\",\"2024-11-18T00:00:00\",\"2024-11-25T00:00:00\",\"2024-12-02T00:00:00\",\"2024-12-09T00:00:00\",\"2024-12-16T00:00:00\",\"2024-12-23T00:00:00\",\"2025-01-06T00:00:00\",\"2025-01-13T00:00:00\",\"2025-01-20T00:00:00\",\"2025-01-27T00:00:00\",\"2025-02-03T00:00:00\",\"2025-02-10T00:00:00\",\"2025-02-17T00:00:00\",\"2025-02-24T00:00:00\",\"2025-03-03T00:00:00\",\"2025-03-10T00:00:00\",\"2025-03-17T00:00:00\",\"2025-03-24T00:00:00\",\"2025-03-31T00:00:00\",\"2025-04-07T00:00:00\",\"2025-04-14T00:00:00\",\"2025-04-21T00:00:00\",\"2025-04-28T00:00:00\",\"2025-05-05T00:00:00\",\"2025-05-12T00:00:00\",\"2025-05-19T00:00:00\",\"2025-05-26T00:00:00\",\"2025-06-02T00:00:00\",\"2025-06-09T00:00:00\",\"2025-06-16T00:00:00\"],\"y\":[665,622,631,750,577,638,698,770,663,771,741,642,989,732,718,322,541,551,744,605,819,502,566,630,471,533,513,508,516,627,629,755,770,715,1006,771,717,836,713,869,964,831,823,510,579,945,1016,887,1247,1351,663,770,558,444,452,1040,740,593,496,544,731,582,709,696,840,875,834,855,567,678,769,586,640,613],\"type\":\"scatter\"}],                        {\"template\":{\"data\":{\"histogram2dcontour\":[{\"type\":\"histogram2dcontour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"choropleth\":[{\"type\":\"choropleth\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"histogram2d\":[{\"type\":\"histogram2d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmap\":[{\"type\":\"heatmap\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmapgl\":[{\"type\":\"heatmapgl\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"contourcarpet\":[{\"type\":\"contourcarpet\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"contour\":[{\"type\":\"contour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"surface\":[{\"type\":\"surface\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"mesh3d\":[{\"type\":\"mesh3d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"scatter\":[{\"fillpattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2},\"type\":\"scatter\"}],\"parcoords\":[{\"type\":\"parcoords\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolargl\":[{\"type\":\"scatterpolargl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"bar\":[{\"error_x\":{\"color\":\"#2a3f5f\"},\"error_y\":{\"color\":\"#2a3f5f\"},\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"bar\"}],\"scattergeo\":[{\"type\":\"scattergeo\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolar\":[{\"type\":\"scatterpolar\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"histogram\":[{\"marker\":{\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"histogram\"}],\"scattergl\":[{\"type\":\"scattergl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatter3d\":[{\"type\":\"scatter3d\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattermapbox\":[{\"type\":\"scattermapbox\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterternary\":[{\"type\":\"scatterternary\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattercarpet\":[{\"type\":\"scattercarpet\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"carpet\":[{\"aaxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"baxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"type\":\"carpet\"}],\"table\":[{\"cells\":{\"fill\":{\"color\":\"#EBF0F8\"},\"line\":{\"color\":\"white\"}},\"header\":{\"fill\":{\"color\":\"#C8D4E3\"},\"line\":{\"color\":\"white\"}},\"type\":\"table\"}],\"barpolar\":[{\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"barpolar\"}],\"pie\":[{\"automargin\":true,\"type\":\"pie\"}]},\"layout\":{\"autotypenumbers\":\"strict\",\"colorway\":[\"#636efa\",\"#EF553B\",\"#00cc96\",\"#ab63fa\",\"#FFA15A\",\"#19d3f3\",\"#FF6692\",\"#B6E880\",\"#FF97FF\",\"#FECB52\"],\"font\":{\"color\":\"#2a3f5f\"},\"hovermode\":\"closest\",\"hoverlabel\":{\"align\":\"left\"},\"paper_bgcolor\":\"white\",\"plot_bgcolor\":\"#E5ECF6\",\"polar\":{\"bgcolor\":\"#E5ECF6\",\"angularaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"radialaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"ternary\":{\"bgcolor\":\"#E5ECF6\",\"aaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"baxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"caxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"coloraxis\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"colorscale\":{\"sequential\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"sequentialminus\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"diverging\":[[0,\"#8e0152\"],[0.1,\"#c51b7d\"],[0.2,\"#de77ae\"],[0.3,\"#f1b6da\"],[0.4,\"#fde0ef\"],[0.5,\"#f7f7f7\"],[0.6,\"#e6f5d0\"],[0.7,\"#b8e186\"],[0.8,\"#7fbc41\"],[0.9,\"#4d9221\"],[1,\"#276419\"]]},\"xaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"yaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"scene\":{\"xaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"yaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"zaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2}},\"shapedefaults\":{\"line\":{\"color\":\"#2a3f5f\"}},\"annotationdefaults\":{\"arrowcolor\":\"#2a3f5f\",\"arrowhead\":0,\"arrowwidth\":1},\"geo\":{\"bgcolor\":\"white\",\"landcolor\":\"#E5ECF6\",\"subunitcolor\":\"white\",\"showland\":true,\"showlakes\":true,\"lakecolor\":\"white\"},\"title\":{\"x\":0.05},\"mapbox\":{\"style\":\"light\"}}},\"xaxis\":{\"rangeslider\":{\"visible\":true},\"title\":{\"text\":\"Дата\"}},\"title\":{\"text\":\"Продажи 200г пачек кофе поштучно\"},\"yaxis\":{\"title\":{\"text\":\"Количество пачек кофе в шт\"}}},                        {\"responsive\": true}                    ).then(function(){\n",
+              "                            \n",
+              "var gd = document.getElementById('ef1ff27d-b45f-4eca-a562-1e0191f39cf4');\n",
+              "var x = new MutationObserver(function (mutations, observer) {{\n",
+              "        var display = window.getComputedStyle(gd).display;\n",
+              "        if (!display || display === 'none') {{\n",
+              "            console.log([gd, 'removed!']);\n",
+              "            Plotly.purge(gd);\n",
+              "            observer.disconnect();\n",
+              "        }}\n",
+              "}});\n",
+              "\n",
+              "// Listen for the removal of the full notebook cells\n",
+              "var notebookContainer = gd.closest('#notebook-container');\n",
+              "if (notebookContainer) {{\n",
+              "    x.observe(notebookContainer, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "// Listen for the clearing of the current output cell\n",
+              "var outputEl = gd.closest('.output');\n",
+              "if (outputEl) {{\n",
+              "    x.observe(outputEl, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "                        })                };                            </script>        </div>\n",
+              "</body>\n",
+              "</html>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "fig = go.Figure()\n",
+        "fig.add_scatter(x=df.Date, y=df['All coffee'], line=dict(color='grey'))\n",
+        "fig.update_xaxes(rangeslider_visible=True) # Обновляем ось Х, добавляя в нее ползунок диапазона\n",
+        "# Добавляем заголовок к графику\n",
+        "fig.update_layout(\n",
+        "    title='Продажи кофе по датам в кг',\n",
+        "    xaxis_title='Дата',\n",
+        "    yaxis_title='Количество кофе в кг'\n",
+        ")\n",
+        "fig.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 542
+        },
+        "id": "QqzrHOsSwoaD",
+        "outputId": "e9fbb5ee-c2d7-4ded-a843-2cd5d52a339e"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<html>\n",
+              "<head><meta charset=\"utf-8\" /></head>\n",
+              "<body>\n",
+              "    <div>            <script src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG\"></script><script type=\"text/javascript\">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: \"STIX-Web\"}});}</script>                <script type=\"text/javascript\">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>\n",
+              "        <script charset=\"utf-8\" src=\"https://cdn.plot.ly/plotly-2.35.2.min.js\"></script>                <div id=\"c9bc1866-f5ad-4664-8c66-35e1d56fc788\" class=\"plotly-graph-div\" style=\"height:525px; width:100%;\"></div>            <script type=\"text/javascript\">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById(\"c9bc1866-f5ad-4664-8c66-35e1d56fc788\")) {                    Plotly.newPlot(                        \"c9bc1866-f5ad-4664-8c66-35e1d56fc788\",                        [{\"line\":{\"color\":\"grey\"},\"x\":[\"2024-01-08T00:00:00\",\"2024-01-15T00:00:00\",\"2024-01-22T00:00:00\",\"2024-01-29T00:00:00\",\"2024-02-05T00:00:00\",\"2024-02-12T00:00:00\",\"2024-02-19T00:00:00\",\"2024-02-26T00:00:00\",\"2024-03-04T00:00:00\",\"2024-03-11T00:00:00\",\"2024-03-18T00:00:00\",\"2024-04-01T00:00:00\",\"2024-04-08T00:00:00\",\"2024-04-15T00:00:00\",\"2024-04-22T00:00:00\",\"2024-04-27T00:00:00\",\"2024-05-06T00:00:00\",\"2024-05-13T00:00:00\",\"2024-05-20T00:00:00\",\"2024-05-27T00:00:00\",\"2024-06-03T00:00:00\",\"2024-06-10T00:00:00\",\"2024-06-17T00:00:00\",\"2024-06-24T00:00:00\",\"2024-07-01T00:00:00\",\"2024-07-08T00:00:00\",\"2024-07-15T00:00:00\",\"2024-07-22T00:00:00\",\"2024-07-29T00:00:00\",\"2024-08-05T00:00:00\",\"2024-08-12T00:00:00\",\"2024-08-19T00:00:00\",\"2024-08-26T00:00:00\",\"2024-09-02T00:00:00\",\"2024-09-09T00:00:00\",\"2024-09-16T00:00:00\",\"2024-09-23T00:00:00\",\"2024-09-30T00:00:00\",\"2024-10-07T00:00:00\",\"2024-10-14T00:00:00\",\"2024-10-21T00:00:00\",\"2024-10-28T00:00:00\",\"2024-11-04T00:00:00\",\"2024-11-11T00:00:00\",\"2024-11-18T00:00:00\",\"2024-11-25T00:00:00\",\"2024-12-02T00:00:00\",\"2024-12-09T00:00:00\",\"2024-12-16T00:00:00\",\"2024-12-23T00:00:00\",\"2025-01-06T00:00:00\",\"2025-01-13T00:00:00\",\"2025-01-20T00:00:00\",\"2025-01-27T00:00:00\",\"2025-02-03T00:00:00\",\"2025-02-10T00:00:00\",\"2025-02-17T00:00:00\",\"2025-02-24T00:00:00\",\"2025-03-03T00:00:00\",\"2025-03-10T00:00:00\",\"2025-03-17T00:00:00\",\"2025-03-24T00:00:00\",\"2025-03-31T00:00:00\",\"2025-04-07T00:00:00\",\"2025-04-14T00:00:00\",\"2025-04-21T00:00:00\",\"2025-04-28T00:00:00\",\"2025-05-05T00:00:00\",\"2025-05-12T00:00:00\",\"2025-05-19T00:00:00\",\"2025-05-26T00:00:00\",\"2025-06-02T00:00:00\",\"2025-06-09T00:00:00\",\"2025-06-16T00:00:00\"],\"y\":[5379,4440,3799,5108,4735,5839,5263,6386,6075,7520,6216,6387,8589,8906,8919,5782,6499,5251,6307,6226,8016,5932,6680,6247,7268,5862,6020,5997,6641,5781,7981,6676,7687,6625,8065,7251,7682,7153,7833,7054,6891,6943,7631,6256,6839,6844,8427,6473,9105,9812,6573,7770,5234,6876,6504,7603,6281,6983,7211,7153,7687,8296,8181,8816,8132,9523,8741,8835,7489,8952,8481,9484,8067,8594],\"type\":\"scatter\"}],                        {\"template\":{\"data\":{\"histogram2dcontour\":[{\"type\":\"histogram2dcontour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"choropleth\":[{\"type\":\"choropleth\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"histogram2d\":[{\"type\":\"histogram2d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmap\":[{\"type\":\"heatmap\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmapgl\":[{\"type\":\"heatmapgl\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"contourcarpet\":[{\"type\":\"contourcarpet\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"contour\":[{\"type\":\"contour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"surface\":[{\"type\":\"surface\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"mesh3d\":[{\"type\":\"mesh3d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"scatter\":[{\"fillpattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2},\"type\":\"scatter\"}],\"parcoords\":[{\"type\":\"parcoords\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolargl\":[{\"type\":\"scatterpolargl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"bar\":[{\"error_x\":{\"color\":\"#2a3f5f\"},\"error_y\":{\"color\":\"#2a3f5f\"},\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"bar\"}],\"scattergeo\":[{\"type\":\"scattergeo\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolar\":[{\"type\":\"scatterpolar\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"histogram\":[{\"marker\":{\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"histogram\"}],\"scattergl\":[{\"type\":\"scattergl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatter3d\":[{\"type\":\"scatter3d\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattermapbox\":[{\"type\":\"scattermapbox\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterternary\":[{\"type\":\"scatterternary\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattercarpet\":[{\"type\":\"scattercarpet\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"carpet\":[{\"aaxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"baxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"type\":\"carpet\"}],\"table\":[{\"cells\":{\"fill\":{\"color\":\"#EBF0F8\"},\"line\":{\"color\":\"white\"}},\"header\":{\"fill\":{\"color\":\"#C8D4E3\"},\"line\":{\"color\":\"white\"}},\"type\":\"table\"}],\"barpolar\":[{\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"barpolar\"}],\"pie\":[{\"automargin\":true,\"type\":\"pie\"}]},\"layout\":{\"autotypenumbers\":\"strict\",\"colorway\":[\"#636efa\",\"#EF553B\",\"#00cc96\",\"#ab63fa\",\"#FFA15A\",\"#19d3f3\",\"#FF6692\",\"#B6E880\",\"#FF97FF\",\"#FECB52\"],\"font\":{\"color\":\"#2a3f5f\"},\"hovermode\":\"closest\",\"hoverlabel\":{\"align\":\"left\"},\"paper_bgcolor\":\"white\",\"plot_bgcolor\":\"#E5ECF6\",\"polar\":{\"bgcolor\":\"#E5ECF6\",\"angularaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"radialaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"ternary\":{\"bgcolor\":\"#E5ECF6\",\"aaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"baxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"caxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"coloraxis\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"colorscale\":{\"sequential\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"sequentialminus\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"diverging\":[[0,\"#8e0152\"],[0.1,\"#c51b7d\"],[0.2,\"#de77ae\"],[0.3,\"#f1b6da\"],[0.4,\"#fde0ef\"],[0.5,\"#f7f7f7\"],[0.6,\"#e6f5d0\"],[0.7,\"#b8e186\"],[0.8,\"#7fbc41\"],[0.9,\"#4d9221\"],[1,\"#276419\"]]},\"xaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"yaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"scene\":{\"xaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"yaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"zaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2}},\"shapedefaults\":{\"line\":{\"color\":\"#2a3f5f\"}},\"annotationdefaults\":{\"arrowcolor\":\"#2a3f5f\",\"arrowhead\":0,\"arrowwidth\":1},\"geo\":{\"bgcolor\":\"white\",\"landcolor\":\"#E5ECF6\",\"subunitcolor\":\"white\",\"showland\":true,\"showlakes\":true,\"lakecolor\":\"white\"},\"title\":{\"x\":0.05},\"mapbox\":{\"style\":\"light\"}}},\"xaxis\":{\"rangeslider\":{\"visible\":true},\"title\":{\"text\":\"Дата\"}},\"title\":{\"text\":\"Продажи кофе по датам в кг\"},\"yaxis\":{\"title\":{\"text\":\"Количество кофе в кг\"}}},                        {\"responsive\": true}                    ).then(function(){\n",
+              "                            \n",
+              "var gd = document.getElementById('c9bc1866-f5ad-4664-8c66-35e1d56fc788');\n",
+              "var x = new MutationObserver(function (mutations, observer) {{\n",
+              "        var display = window.getComputedStyle(gd).display;\n",
+              "        if (!display || display === 'none') {{\n",
+              "            console.log([gd, 'removed!']);\n",
+              "            Plotly.purge(gd);\n",
+              "            observer.disconnect();\n",
+              "        }}\n",
+              "}});\n",
+              "\n",
+              "// Listen for the removal of the full notebook cells\n",
+              "var notebookContainer = gd.closest('#notebook-container');\n",
+              "if (notebookContainer) {{\n",
+              "    x.observe(notebookContainer, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "// Listen for the clearing of the current output cell\n",
+              "var outputEl = gd.closest('.output');\n",
+              "if (outputEl) {{\n",
+              "    x.observe(outputEl, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "                        })                };                            </script>        </div>\n",
+              "</body>\n",
+              "</html>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Наблюдения и выводы относительно графика продаж общего объема кофе."
+      ],
+      "metadata": {
+        "id": "FcxvyBGSy5Bf"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "1. Январь 20-22 числах спад продаж по причине предварительных больших новогодних заказов в декабре.\n",
+        "2. Высокий спрос зафиксирован в апреле 21-22 числах(предположительно когда теплеет и из-за праздников).\n",
+        "3. Также декабрь не менее нагруженный месяц, кофейни заказывают больше в преддверии январских праздников.\n",
+        "4. В период с января 2024 по май 2025 выводим следующие показаели:\n"
+      ],
+      "metadata": {
+        "id": "SZCINkJPzJL1"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "average1 = df['All coffee'].max()\n",
+        "average2 = df['All coffee'].mean()\n",
+        "average3 = df['All coffee'].min()\n",
+        "print(f\"Максимальное значение за период 'All coffee': {average1} кг\")\n",
+        "print(f\"Среднее значение за период 'All coffee': {average2} кг\")\n",
+        "print(f\"Минимальное значение за период 'All coffee': {average3} кг\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SltZqywD0liJ",
+        "outputId": "1679d2f0-5b1c-4f9a-feee-57a59f4e5ecf"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Максимальное значение за период 'All coffee': 9812 кг\n",
+            "Среднее значение за период 'All coffee': 7091.405405405405 кг\n",
+            "Минимальное значение за период 'All coffee': 3799 кг\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import plotly.graph_objects as go\n",
+        "\n",
+        "# Создаем график\n",
+        "fig = go.Figure()\n",
+        "\n",
+        "# Исторические данные\n",
+        "fig.add_scatter(\n",
+        "    x=df['Date'],\n",
+        "    y=df['All coffee'],\n",
+        "    name='Исторические данные',\n",
+        "    line=dict(color='grey')\n",
+        ")\n",
+        "\n",
+        "# Прогноз\n",
+        "forecast_dates = pd.date_range(\n",
+        "    start=df['Date'].iloc[-1] + pd.Timedelta(days=7),  # Продолжаем с последней даты + неделя\n",
+        "    periods=12,  # 12 шагов вперед\n",
+        "    freq='W'     # Частота (еженедельно)\n",
+        ")\n",
+        "fig.add_scatter(\n",
+        "    x=forecast_dates,\n",
+        "    y=forecast.predicted_mean,\n",
+        "    name='Прогноз',\n",
+        "    line=dict(color='red')\n",
+        ")\n",
+        "\n",
+        "# Настройки осей и бегунка\n",
+        "fig.update_layout(\n",
+        "    title='Прогноз продаж кофе на 12 недель вперед',\n",
+        "    xaxis_title='Дата',\n",
+        "    yaxis_title='Количество кофе (кг)',\n",
+        "    xaxis=dict(\n",
+        "        rangeslider=dict(visible=True),  # Включаем бегунок\n",
+        "        type='date'                      # Формат дат\n",
+        "    )\n",
+        ")\n",
+        "\n",
+        "fig.show()\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 562
+        },
+        "id": "X7yxJd7Ym-UF",
+        "outputId": "2d777067-487f-4e82-a6fb-3082cdb29a52"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<html>\n",
+              "<head><meta charset=\"utf-8\" /></head>\n",
+              "<body>\n",
+              "    <div>            <script src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG\"></script><script type=\"text/javascript\">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: \"STIX-Web\"}});}</script>                <script type=\"text/javascript\">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>\n",
+              "        <script charset=\"utf-8\" src=\"https://cdn.plot.ly/plotly-2.35.2.min.js\"></script>                <div id=\"d87f8a58-f0b8-4b7b-a132-16d98ffed2eb\" class=\"plotly-graph-div\" style=\"height:525px; width:100%;\"></div>            <script type=\"text/javascript\">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById(\"d87f8a58-f0b8-4b7b-a132-16d98ffed2eb\")) {                    Plotly.newPlot(                        \"d87f8a58-f0b8-4b7b-a132-16d98ffed2eb\",                        [{\"line\":{\"color\":\"grey\"},\"name\":\"Исторические данные\",\"x\":[\"2024-01-08T00:00:00\",\"2024-01-15T00:00:00\",\"2024-01-22T00:00:00\",\"2024-01-29T00:00:00\",\"2024-02-05T00:00:00\",\"2024-02-12T00:00:00\",\"2024-02-19T00:00:00\",\"2024-02-26T00:00:00\",\"2024-03-04T00:00:00\",\"2024-03-11T00:00:00\",\"2024-03-18T00:00:00\",\"2024-04-01T00:00:00\",\"2024-04-08T00:00:00\",\"2024-04-15T00:00:00\",\"2024-04-22T00:00:00\",\"2024-04-27T00:00:00\",\"2024-05-06T00:00:00\",\"2024-05-13T00:00:00\",\"2024-05-20T00:00:00\",\"2024-05-27T00:00:00\",\"2024-06-03T00:00:00\",\"2024-06-10T00:00:00\",\"2024-06-17T00:00:00\",\"2024-06-24T00:00:00\",\"2024-07-01T00:00:00\",\"2024-07-08T00:00:00\",\"2024-07-15T00:00:00\",\"2024-07-22T00:00:00\",\"2024-07-29T00:00:00\",\"2024-08-05T00:00:00\",\"2024-08-12T00:00:00\",\"2024-08-19T00:00:00\",\"2024-08-26T00:00:00\",\"2024-09-02T00:00:00\",\"2024-09-09T00:00:00\",\"2024-09-16T00:00:00\",\"2024-09-23T00:00:00\",\"2024-09-30T00:00:00\",\"2024-10-07T00:00:00\",\"2024-10-14T00:00:00\",\"2024-10-21T00:00:00\",\"2024-10-28T00:00:00\",\"2024-11-04T00:00:00\",\"2024-11-11T00:00:00\",\"2024-11-18T00:00:00\",\"2024-11-25T00:00:00\",\"2024-12-02T00:00:00\",\"2024-12-09T00:00:00\",\"2024-12-16T00:00:00\",\"2024-12-23T00:00:00\",\"2025-01-06T00:00:00\",\"2025-01-13T00:00:00\",\"2025-01-20T00:00:00\",\"2025-01-27T00:00:00\",\"2025-02-03T00:00:00\",\"2025-02-10T00:00:00\",\"2025-02-17T00:00:00\",\"2025-02-24T00:00:00\",\"2025-03-03T00:00:00\",\"2025-03-10T00:00:00\",\"2025-03-17T00:00:00\",\"2025-03-24T00:00:00\",\"2025-03-31T00:00:00\",\"2025-04-07T00:00:00\",\"2025-04-14T00:00:00\",\"2025-04-21T00:00:00\",\"2025-04-28T00:00:00\",\"2025-05-05T00:00:00\",\"2025-05-12T00:00:00\",\"2025-05-19T00:00:00\",\"2025-05-26T00:00:00\",\"2025-06-02T00:00:00\",\"2025-06-09T00:00:00\",\"2025-06-16T00:00:00\"],\"y\":[5379,4440,3799,5108,4735,5839,5263,6386,6075,7520,6216,6387,8589,8906,8919,5782,6499,5251,6307,6226,8016,5932,6680,6247,7268,5862,6020,5997,6641,5781,7981,6676,7687,6625,8065,7251,7682,7153,7833,7054,6891,6943,7631,6256,6839,6844,8427,6473,9105,9812,6573,7770,5234,6876,6504,7603,6281,6983,7211,7153,7687,8296,8181,8816,8132,9523,8741,8835,7489,8952,8481,9484,8067,8594],\"type\":\"scatter\"},{\"line\":{\"color\":\"red\"},\"name\":\"Прогноз\",\"x\":[\"2025-06-29T00:00:00\",\"2025-07-06T00:00:00\",\"2025-07-13T00:00:00\",\"2025-07-20T00:00:00\",\"2025-07-27T00:00:00\",\"2025-08-03T00:00:00\",\"2025-08-10T00:00:00\",\"2025-08-17T00:00:00\",\"2025-08-24T00:00:00\",\"2025-08-31T00:00:00\",\"2025-09-07T00:00:00\",\"2025-09-14T00:00:00\"],\"y\":[7162.744135982115,7680.884333171069,6761.558928925348,7457.416334376677,7533.09134728374,7737.732856380132,7665.199678402347,7823.067116599087,8101.232504228307,7756.432631284406,8979.534176348669,8924.158434925579],\"type\":\"scatter\"}],                        {\"template\":{\"data\":{\"histogram2dcontour\":[{\"type\":\"histogram2dcontour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"choropleth\":[{\"type\":\"choropleth\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"histogram2d\":[{\"type\":\"histogram2d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmap\":[{\"type\":\"heatmap\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"heatmapgl\":[{\"type\":\"heatmapgl\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"contourcarpet\":[{\"type\":\"contourcarpet\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"contour\":[{\"type\":\"contour\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"surface\":[{\"type\":\"surface\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"},\"colorscale\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]]}],\"mesh3d\":[{\"type\":\"mesh3d\",\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}],\"scatter\":[{\"fillpattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2},\"type\":\"scatter\"}],\"parcoords\":[{\"type\":\"parcoords\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolargl\":[{\"type\":\"scatterpolargl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"bar\":[{\"error_x\":{\"color\":\"#2a3f5f\"},\"error_y\":{\"color\":\"#2a3f5f\"},\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"bar\"}],\"scattergeo\":[{\"type\":\"scattergeo\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterpolar\":[{\"type\":\"scatterpolar\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"histogram\":[{\"marker\":{\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"histogram\"}],\"scattergl\":[{\"type\":\"scattergl\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatter3d\":[{\"type\":\"scatter3d\",\"line\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattermapbox\":[{\"type\":\"scattermapbox\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scatterternary\":[{\"type\":\"scatterternary\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"scattercarpet\":[{\"type\":\"scattercarpet\",\"marker\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}}}],\"carpet\":[{\"aaxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"baxis\":{\"endlinecolor\":\"#2a3f5f\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"minorgridcolor\":\"white\",\"startlinecolor\":\"#2a3f5f\"},\"type\":\"carpet\"}],\"table\":[{\"cells\":{\"fill\":{\"color\":\"#EBF0F8\"},\"line\":{\"color\":\"white\"}},\"header\":{\"fill\":{\"color\":\"#C8D4E3\"},\"line\":{\"color\":\"white\"}},\"type\":\"table\"}],\"barpolar\":[{\"marker\":{\"line\":{\"color\":\"#E5ECF6\",\"width\":0.5},\"pattern\":{\"fillmode\":\"overlay\",\"size\":10,\"solidity\":0.2}},\"type\":\"barpolar\"}],\"pie\":[{\"automargin\":true,\"type\":\"pie\"}]},\"layout\":{\"autotypenumbers\":\"strict\",\"colorway\":[\"#636efa\",\"#EF553B\",\"#00cc96\",\"#ab63fa\",\"#FFA15A\",\"#19d3f3\",\"#FF6692\",\"#B6E880\",\"#FF97FF\",\"#FECB52\"],\"font\":{\"color\":\"#2a3f5f\"},\"hovermode\":\"closest\",\"hoverlabel\":{\"align\":\"left\"},\"paper_bgcolor\":\"white\",\"plot_bgcolor\":\"#E5ECF6\",\"polar\":{\"bgcolor\":\"#E5ECF6\",\"angularaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"radialaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"ternary\":{\"bgcolor\":\"#E5ECF6\",\"aaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"baxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"},\"caxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\"}},\"coloraxis\":{\"colorbar\":{\"outlinewidth\":0,\"ticks\":\"\"}},\"colorscale\":{\"sequential\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"sequentialminus\":[[0.0,\"#0d0887\"],[0.1111111111111111,\"#46039f\"],[0.2222222222222222,\"#7201a8\"],[0.3333333333333333,\"#9c179e\"],[0.4444444444444444,\"#bd3786\"],[0.5555555555555556,\"#d8576b\"],[0.6666666666666666,\"#ed7953\"],[0.7777777777777778,\"#fb9f3a\"],[0.8888888888888888,\"#fdca26\"],[1.0,\"#f0f921\"]],\"diverging\":[[0,\"#8e0152\"],[0.1,\"#c51b7d\"],[0.2,\"#de77ae\"],[0.3,\"#f1b6da\"],[0.4,\"#fde0ef\"],[0.5,\"#f7f7f7\"],[0.6,\"#e6f5d0\"],[0.7,\"#b8e186\"],[0.8,\"#7fbc41\"],[0.9,\"#4d9221\"],[1,\"#276419\"]]},\"xaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"yaxis\":{\"gridcolor\":\"white\",\"linecolor\":\"white\",\"ticks\":\"\",\"title\":{\"standoff\":15},\"zerolinecolor\":\"white\",\"automargin\":true,\"zerolinewidth\":2},\"scene\":{\"xaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"yaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2},\"zaxis\":{\"backgroundcolor\":\"#E5ECF6\",\"gridcolor\":\"white\",\"linecolor\":\"white\",\"showbackground\":true,\"ticks\":\"\",\"zerolinecolor\":\"white\",\"gridwidth\":2}},\"shapedefaults\":{\"line\":{\"color\":\"#2a3f5f\"}},\"annotationdefaults\":{\"arrowcolor\":\"#2a3f5f\",\"arrowhead\":0,\"arrowwidth\":1},\"geo\":{\"bgcolor\":\"white\",\"landcolor\":\"#E5ECF6\",\"subunitcolor\":\"white\",\"showland\":true,\"showlakes\":true,\"lakecolor\":\"white\"},\"title\":{\"x\":0.05},\"mapbox\":{\"style\":\"light\"}}},\"xaxis\":{\"rangeslider\":{\"visible\":true},\"title\":{\"text\":\"Дата\"},\"type\":\"date\"},\"title\":{\"text\":\"Прогноз продаж кофе на 12 недель вперед\"},\"yaxis\":{\"title\":{\"text\":\"Количество кофе (кг)\"}}},                        {\"responsive\": true}                    ).then(function(){\n",
+              "                            \n",
+              "var gd = document.getElementById('d87f8a58-f0b8-4b7b-a132-16d98ffed2eb');\n",
+              "var x = new MutationObserver(function (mutations, observer) {{\n",
+              "        var display = window.getComputedStyle(gd).display;\n",
+              "        if (!display || display === 'none') {{\n",
+              "            console.log([gd, 'removed!']);\n",
+              "            Plotly.purge(gd);\n",
+              "            observer.disconnect();\n",
+              "        }}\n",
+              "}});\n",
+              "\n",
+              "// Listen for the removal of the full notebook cells\n",
+              "var notebookContainer = gd.closest('#notebook-container');\n",
+              "if (notebookContainer) {{\n",
+              "    x.observe(notebookContainer, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "// Listen for the clearing of the current output cell\n",
+              "var outputEl = gd.closest('.output');\n",
+              "if (outputEl) {{\n",
+              "    x.observe(outputEl, {childList: true});\n",
+              "}}\n",
+              "\n",
+              "                        })                };                            </script>        </div>\n",
+              "</body>\n",
+              "</html>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [],
+      "metadata": {
+        "id": "a4uKGd702AkT"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Прогнозируем будущие заказы кофе у производства. 29 Июня ожидается запрос на покупку кофе в размере 7 тонн жареного кофе.\n",
+        "Минимальный заказ ожидается 13 июля (но обычно июль это жаркий месяц, мне кажется заказ будет больше, посмотрим в след месяце).\n",
+        "Пик прогноза приходится на 7 сентября. Тенденция к росту заказов со временем сохраняется. Вывод: производстово должно быть готово к такому объему заказов. В последующие месяцы можно будет сравнить прогноз с реальными данными, далее можно корректировать модель и делать ее лучше. Также со временем эту модель можно улучшить если добавить зависимость дневной температуры и спроса на кофе."
+      ],
+      "metadata": {
+        "id": "_8RqeAsDoqiX"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Источник данных, еженедельные закази 200+ кофеен по всей РФ и немного за рубежом.\n",
+        "Модель для прогноза SARIMA.\n",
+        "Погодные условия сильно влияют на спрос кофе. В дальнейшем планирую собрать данные по среднему значению температуры на неделю с помощью парсинга, сравнив это с количеством заказанного кофе.\n"
+      ],
+      "metadata": {
+        "id": "fIKAKuVv2O-p"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Ключевая цель проекта: Добиться максимальной точности прогнозирования."
+      ],
+      "metadata": {
+        "id": "aaqdp8LB3D-z"
+      }
+    }
+  ]
+}
