@@ -1,0 +1,7 @@
+pandas>=1.0
+plotly>=5.0
+numpy>=1.20
+.gitignore — исключите ненужные файлы (например, служебные папки Colab):
+.ipynb_checkpoints/
+*.pyc
+pycache/
